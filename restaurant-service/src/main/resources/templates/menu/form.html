@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Menu item')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav('menu')}"></nav>
+<main class="container narrow">
+    <h1 th:text="${form.id == null} ? 'Add menu item' : 'Edit menu item'">Add menu item</h1>
+
+    <form class="card form" th:action="@{/menu/save}" th:object="${form}" method="post">
+        <input type="hidden" th:field="*{id}">
+
+        <label>Type
+            <select th:field="*{type}" th:disabled="${form.id != null}" id="type">
+                <option value="FOOD">Food</option>
+                <option value="BEVERAGE">Beverage</option>
+            </select>
+        </label>
+        <!-- a disabled select is not submitted, so keep the value in a hidden field when editing -->
+        <input type="hidden" th:if="${form.id != null}" name="type" th:value="*{type}">
+
+        <label>Name
+            <input type="text" th:field="*{name}">
+            <span class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        </label>
+        <label>Description
+            <input type="text" th:field="*{description}">
+        </label>
+        <div class="row">
+            <label>Price (₹)
+                <input type="number" step="0.01" th:field="*{price}">
+                <span class="field-error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
+            </label>
+            <label>Category
+                <input type="text" th:field="*{category}" list="categories">
+                <datalist id="categories">
+                    <option value="Starter"><option value="Main Course"><option value="Breads">
+                    <option value="Dessert"><option value="Drinks">
+                </datalist>
+                <span class="field-error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></span>
+            </label>
+        </div>
+        <label class="check"><input type="checkbox" th:field="*{available}"> Available</label>
+
+        <fieldset id="food-fields">
+            <legend>Food only</legend>
+            <label class="check"><input type="checkbox" th:field="*{vegetarian}"> Vegetarian</label>
+            <label>Spice level
+                <select th:field="*{spiceLevel}">
+                    <option value="MILD">Mild</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="HOT">Hot</option>
+                </select>
+            </label>
+        </fieldset>
+
+        <fieldset id="beverage-fields">
+            <legend>Beverage only</legend>
+            <label>Volume (ml) <input type="number" th:field="*{volumeMl}"></label>
+            <label class="check"><input type="checkbox" th:field="*{servedCold}"> Served cold</label>
+        </fieldset>
+
+        <div class="form-actions">
+            <button class="btn" type="submit">Save</button>
+            <a th:href="@{/menu}" class="btn btn-link">Cancel</a>
+        </div>
+    </form>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script>
+    // show only the fields that belong to the chosen type
+    const typeSelect = document.getElementById('type');
+    function toggleFields() {
+        const isFood = typeSelect.value === 'FOOD';
+        document.getElementById('food-fields').hidden = !isFood;
+        document.getElementById('beverage-fields').hidden = isFood;
+    }
+    typeSelect.addEventListener('change', toggleFields);
+    toggleFields();
+</script>
+</body>
+</html>

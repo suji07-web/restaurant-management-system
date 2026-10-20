@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- Reusable pieces included by every page -->
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' | Spice Garden'">Spice Garden</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav th:fragment="nav(active)" class="nav">
+    <a th:href="@{/}" class="brand">🍛 Spice Garden</a>
+    <a th:href="@{/}" th:classappend="${active == 'home'} ? 'active'">Dashboard</a>
+    <a th:href="@{/menu}" th:classappend="${active == 'menu'} ? 'active'">Menu</a>
+    <a th:href="@{/orders}" th:classappend="${active == 'orders'} ? 'active'">Orders</a>
+    <a th:href="@{/orders/new}" class="btn btn-small">+ New Order</a>
+</nav>
+
+<div th:fragment="flash">
+    <div class="alert success" th:if="${success}" th:text="${success}"></div>
+    <div class="alert error" th:if="${error}" th:text="${error}"></div>
+</div>
+
+<footer th:fragment="footer" class="footer">
+    Restaurant Management System &middot; Spring Boot + JPA/Hibernate + REST &middot; IT23502 Mini Project
+</footer>
+</body>
+</html>

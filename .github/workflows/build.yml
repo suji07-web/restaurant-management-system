@@ -1,0 +1,28 @@
+# DevOps - Continuous Integration with GitHub Actions.
+# Every push / pull request: GitHub starts a fresh machine, builds both services with Maven
+# and runs all the tests. A red cross on GitHub means something is broken.
+name: Build and test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [ restaurant-service, billing-service ]
+    defaults:
+      run:
+        working-directory: ${{ matrix.service }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - name: Build and run tests
+        run: ./mvnw -B verify

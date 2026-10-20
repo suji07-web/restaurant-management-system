@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Orders')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav('orders')}"></nav>
+<main class="container">
+    <div class="page-header">
+        <h1>Orders</h1>
+        <a th:href="@{/orders/new}" class="btn">+ New order</a>
+    </div>
+    <div th:replace="~{fragments :: flash}"></div>
+
+    <div class="filters">
+        <a th:href="@{/orders}" class="btn btn-small" th:classappend="${selectedStatus == null} ? '' : 'btn-secondary'">All</a>
+        <a th:each="s : ${statuses}" th:href="@{/orders(status=${s})}" th:text="${s}"
+           class="btn btn-small" th:classappend="${selectedStatus == s} ? '' : 'btn-secondary'">STATUS</a>
+    </div>
+
+    <div class="card">
+        <table>
+            <thead><tr><th>#</th><th>Customer</th><th>Table</th><th>Items</th><th>Time</th><th>Status</th><th>Subtotal</th><th></th></tr></thead>
+            <tbody>
+            <tr th:each="o : ${orders}">
+                <td th:text="${o.id}">1</td>
+                <td th:text="${o.customerName}">Name</td>
+                <td th:text="${o.tableNumber}">1</td>
+                <td th:text="${#lists.size(o.items)}">0</td>
+                <td th:text="${#temporals.format(o.orderTime, 'dd MMM, HH:mm')}">time</td>
+                <td><span class="badge" th:classappend="${#strings.toLowerCase(o.status)}" th:text="${o.status}">PLACED</span></td>
+                <td th:text="'₹' + ${#numbers.formatDecimal(o.subtotal, 1, 2)}">₹0</td>
+                <td><a th:href="@{/orders/{id}(id=${o.id})}" class="btn btn-small btn-secondary">View</a></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(orders)}"><td colspan="8" class="muted">No orders</td></tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

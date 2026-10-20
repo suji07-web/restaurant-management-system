@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Order')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav('orders')}"></nav>
+<main class="container">
+    <div class="page-header">
+        <h1>Order #<span th:text="${order.id}">1</span></h1>
+        <span class="badge big" th:classappend="${#strings.toLowerCase(order.status)}" th:text="${order.status}">PLACED</span>
+    </div>
+    <div th:replace="~{fragments :: flash}"></div>
+
+    <div class="grid-2">
+        <section class="card">
+            <p><strong>Customer:</strong> <span th:text="${order.customerName}"></span></p>
+            <p><strong>Table:</strong> <span th:text="${order.tableNumber}"></span></p>
+            <p><strong>Time:</strong> <span th:text="${#temporals.format(order.orderTime, 'dd MMM yyyy, HH:mm')}"></span></p>
+
+            <table>
+                <thead><tr><th>Item</th><th>Qty</th><th>Unit price</th><th>Total</th></tr></thead>
+                <tbody>
+                <tr th:each="line : ${order.items}">
+                    <td th:text="${line.menuItem.name}">Item</td>
+                    <td th:text="${line.quantity}">1</td>
+                    <td th:text="'₹' + ${#numbers.formatDecimal(line.unitPrice, 1, 2)}">₹0</td>
+                    <td th:text="'₹' + ${#numbers.formatDecimal(line.lineTotal, 1, 2)}">₹0</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr><th colspan="3">Subtotal</th><th th:text="'₹' + ${#numbers.formatDecimal(order.subtotal, 1, 2)}">₹0</th></tr>
+                </tfoot>
+            </table>
+        </section>
+
+        <section>
+            <div class="card">
+                <h2>Update status</h2>
+                <form class="inline" th:action="@{/orders/{id}/status(id=${order.id})}" method="post">
+                    <select name="status">
+                        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" th:selected="${s == order.status}"></option>
+                    </select>
+                    <button class="btn" type="submit">Update</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>Bill <small class="muted">(from billing-service on port 8082)</small></h2>
+                <form th:action="@{/orders/{id}/bill(id=${order.id})}" method="post">
+                    <button class="btn" type="submit">Generate bill</button>
+                </form>
+                <table th:if="${bill}" class="bill">
+                    <tr><td>Subtotal</td><td th:text="'₹' + ${#numbers.formatDecimal(bill.subtotal, 1, 2)}"></td></tr>
+                    <tr><td>GST</td><td th:text="'₹' + ${#numbers.formatDecimal(bill.gst, 1, 2)}"></td></tr>
+                    <tr><td>Service charge</td><td th:text="'₹' + ${#numbers.formatDecimal(bill.serviceCharge, 1, 2)}"></td></tr>
+                    <tr><td>Discount</td><td th:text="'- ₹' + ${#numbers.formatDecimal(bill.discount, 1, 2)}"></td></tr>
+                    <tr class="total"><td>Total</td><td th:text="'₹' + ${#numbers.formatDecimal(bill.total, 1, 2)}"></td></tr>
+                    <tr><td colspan="2" class="muted" th:text="'Generated at ' + ${bill.generatedAt}"></td></tr>
+                </table>
+            </div>
+
+            <div class="card">
+                <form th:action="@{/orders/{id}/delete(id=${order.id})}" method="post"
+                      onsubmit="return confirm('Delete this order?')">
+                    <button class="btn btn-danger" type="submit">Delete order</button>
+                </form>
+            </div>
+        </section>
+    </div>
+    <p><a th:href="@{/orders}">&larr; Back to orders</a></p>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

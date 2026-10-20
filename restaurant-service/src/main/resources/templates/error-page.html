@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Error')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav('')}"></nav>
+<main class="container narrow">
+    <div class="card">
+        <h1>Something went wrong</h1>
+        <p class="alert error" th:text="${message}">Error</p>
+        <a th:href="@{/}" class="btn">Back to dashboard</a>
+    </div>
+</main>
+</body>
+</html>

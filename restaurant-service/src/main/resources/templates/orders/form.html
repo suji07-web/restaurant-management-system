@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('New order')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav('orders')}"></nav>
+<main class="container narrow">
+    <h1>New order</h1>
+
+    <form class="card form" th:action="@{/orders}" th:object="${form}" method="post">
+        <div class="alert error" th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+
+        <div class="row">
+            <label>Customer name
+                <input type="text" th:field="*{customerName}">
+                <span class="field-error" th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}"></span>
+            </label>
+            <label>Table number
+                <input type="number" min="1" th:field="*{tableNumber}">
+                <span class="field-error" th:if="${#fields.hasErrors('tableNumber')}" th:errors="*{tableNumber}"></span>
+            </label>
+        </div>
+
+        <table>
+            <thead><tr><th>Item</th><th>Category</th><th>Price</th><th style="width:110px">Qty</th></tr></thead>
+            <tbody>
+            <tr th:each="item : ${menuItems}">
+                <td th:text="${item.name}">Item</td>
+                <td th:text="${item.category}">Category</td>
+                <td th:text="'₹' + ${#numbers.formatDecimal(item.price, 1, 2)}">₹0</td>
+                <td><input type="number" min="0" max="50" class="qty"
+                           th:name="|quantities[${item.id}]|"
+                           th:value="${form.quantities[item.id] != null} ? ${form.quantities[item.id]} : 0"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="form-actions">
+            <button class="btn" type="submit">Place order</button>
+            <a th:href="@{/orders}" class="btn btn-link">Cancel</a>
+        </div>
+    </form>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

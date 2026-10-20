@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Dashboard')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav('home')}"></nav>
+<main class="container">
+    <h1>Dashboard</h1>
+
+    <div class="cards">
+        <div class="card stat"><span class="label">Menu items</span><span class="value" th:text="${menuCount}">0</span></div>
+        <div class="card stat"><span class="label">Total orders</span><span class="value" th:text="${orderCount}">0</span></div>
+        <div class="card stat"><span class="label">Open orders</span><span class="value" th:text="${openOrders}">0</span></div>
+        <div class="card stat"><span class="label">Revenue (paid)</span>
+            <span class="value" th:text="'₹' + ${#numbers.formatDecimal(revenue, 1, 2)}">₹0</span></div>
+    </div>
+
+    <div class="grid-2">
+        <section class="card">
+            <h2>Recent orders</h2>
+            <table>
+                <thead><tr><th>#</th><th>Customer</th><th>Table</th><th>Status</th><th>Amount</th></tr></thead>
+                <tbody>
+                <tr th:each="o : ${recentOrders}">
+                    <td><a th:href="@{/orders/{id}(id=${o.id})}" th:text="${o.id}">1</a></td>
+                    <td th:text="${o.customerName}">Name</td>
+                    <td th:text="${o.tableNumber}">1</td>
+                    <td><span class="badge" th:classappend="${#strings.toLowerCase(o.status)}" th:text="${o.status}">PLACED</span></td>
+                    <td th:text="'₹' + ${#numbers.formatDecimal(o.subtotal, 1, 2)}">₹0</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(recentOrders)}"><td colspan="5" class="muted">No orders yet</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card">
+            <h2>Best sellers <small class="muted">(HQL GROUP BY)</small></h2>
+            <table>
+                <thead><tr><th>Item</th><th>Qty sold</th></tr></thead>
+                <tbody>
+                <tr th:each="row : ${topItems}">
+                    <td th:text="${row[0]}">Item</td>
+                    <td th:text="${row[1]}">0</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(topItems)}"><td colspan="2" class="muted">No sales yet</td></tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <section class="card">
+        <h2>REST API &amp; demos</h2>
+        <ul class="links">
+            <li><a href="/api/menu" target="_blank">GET /api/menu</a> &mdash; menu as JSON</li>
+            <li><a href="/api/orders" target="_blank">GET /api/orders</a> &mdash; orders as JSON</li>
+            <li><a href="/api/orders/stats" target="_blank">GET /api/orders/stats</a> &mdash; revenue + best sellers</li>
+            <li><a href="/api/demo/hibernate" target="_blank">GET /api/demo/hibernate</a> &mdash; SessionFactory / Session / Transaction demo</li>
+            <li><a href="/api/demo/beans" target="_blank">GET /api/demo/beans</a> &mdash; BeanFactory vs ApplicationContext demo</li>
+            <li><a href="http://localhost:8082/api/bills/rates" target="_blank">GET :8082/api/bills/rates</a> &mdash; billing microservice</li>
+        </ul>
+    </section>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,613 @@
+{
+  "info": {
+    "name": "Restaurant Management - REST APIs",
+    "description": "IT23502 mini project. Start restaurant-service (8080) and billing-service (8082) first.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "billingUrl",
+      "value": "http://localhost:8082"
+    }
+  ],
+  "item": [
+    {
+      "name": "Menu",
+      "item": [
+        {
+          "name": "GET all menu items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/menu",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "menu"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET menu item by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/menu/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "menu",
+                "1"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET items under price (HQL)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/menu?maxPrice=100",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "menu"
+              ],
+              "query": [
+                {
+                  "key": "maxPrice",
+                  "value": "100"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET search by name (HQL)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/menu?q=paneer",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "menu"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "paneer"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET vegetarian food (HQL on subclass)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/menu/vegetarian",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "menu",
+                "vegetarian"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "POST create food item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/menu",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "menu"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"FOOD\",\n  \"name\": \"Masala Dosa\",\n  \"description\": \"Crispy dosa with potato masala\",\n  \"price\": 120,\n  \"category\": \"Main Course\",\n  \"vegetarian\": true,\n  \"spiceLevel\": \"MILD\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST create beverage",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/menu",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "menu"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"BEVERAGE\",\n  \"name\": \"Rose Milk\",\n  \"price\": 60,\n  \"category\": \"Drinks\",\n  \"volumeMl\": 250,\n  \"servedCold\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST invalid item (400 Bad Request)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/menu",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "menu"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"FOOD\",\n  \"name\": \"\",\n  \"price\": -10,\n  \"category\": \"Starter\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PUT update menu item",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/menu/3",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "menu",
+                "3"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"FOOD\",\n  \"name\": \"Veg Spring Roll\",\n  \"description\": \"Crispy rolls (6 pcs)\",\n  \"price\": 170,\n  \"category\": \"Starter\",\n  \"available\": true,\n  \"vegetarian\": true,\n  \"spiceLevel\": \"MILD\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE menu item",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/menu/14",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "menu",
+                "14"
+              ]
+            },
+            "description": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "GET all orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET orders by status (HQL)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders?status=PLACED",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "PLACED"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET order by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "1"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "POST place order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Priya\",\n  \"tableNumber\": 6,\n  \"items\": [\n    {\n      \"menuItemId\": 4,\n      \"quantity\": 2\n    },\n    {\n      \"menuItemId\": 8,\n      \"quantity\": 3\n    },\n    {\n      \"menuItemId\": 12,\n      \"quantity\": 2\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PATCH update order status",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/3/status?status=SERVED",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "3",
+                "status"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "SERVED"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET bill (calls billing microservice)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/1/bill",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "1",
+                "bill"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET stats (HQL SUM + GROUP BY)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/stats",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "stats"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET unknown order (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/9999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "9999"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "DELETE order",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/3",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "orders",
+                "3"
+              ]
+            },
+            "description": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "Billing microservice (port 8082)",
+      "item": [
+        {
+          "name": "GET rates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{billingUrl}}/api/bills/rates",
+              "host": [
+                "{{billingUrl}}"
+              ],
+              "path": [
+                "api",
+                "bills",
+                "rates"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "POST calculate bill directly",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{billingUrl}}/api/bills/calculate",
+              "host": [
+                "{{billingUrl}}"
+              ],
+              "path": [
+                "api",
+                "bills",
+                "calculate"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": 1,\n  \"customerName\": \"Arjun\",\n  \"subtotal\": 1060\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{billingUrl}}/actuator/health",
+              "host": [
+                "{{billingUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            },
+            "description": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "Concept demos",
+      "item": [
+        {
+          "name": "Hibernate SessionFactory / Session / Transaction",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/demo/hibernate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "demo",
+                "hibernate"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "BeanFactory vs ApplicationContext",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/demo/beans",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "demo",
+                "beans"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Actuator health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            },
+            "description": ""
+          }
+        }
+      ]
+    }
+  ]
+}
